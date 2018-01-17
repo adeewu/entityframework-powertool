@@ -1,0 +1,101 @@
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude" #><#@
+ output extension=".cs|Controllers.Examples|Controller" #><#
+
+    var efHost = (EfTextTemplateHost)Host;
+    var code = new CodeGenerationTools(this);
+
+	var viewModelName = efHost.EntityType.Name + "ViewModel";
+	var modelName = efHost.EntityType.Name + "Model";
+#>
+/*using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+<#
+	var modelNamespaces = efHost.Namespace.Split('.');
+	var modelNamespacePrefix = string.Join(".", modelNamespaces.Take(modelNamespaces.Count() - 1));
+	var serviceModelName = efHost.EntityType.Name + "Service";
+#>
+
+using CIT.Platform.Pager;
+using <#= modelNamespacePrefix #>.Service;
+using <#= modelNamespacePrefix #>.Service.Services;
+using <#= modelNamespacePrefix #>.ViewModel.ViewModels;
+
+namespace <#= code.EscapeNamespace(efHost.Namespace) #>.<#= efHost.NameSpaceSuffix #>
+{
+    /// <summary>
+    /// <#= efHost.EntityType.Name #>接口
+    /// </summary>
+    public partial class <#= efHost.EntityType.Name #><#= efHost.NameSuffix #> : ApiController
+    {
+        /// <summary>
+        /// 获取分页集合
+        /// </summary>
+        /// <param name="viewModel">分页参数</param>
+        /// <returns></returns>
+		public IPagerEnumerable<<#= viewModelName #>> Get([FromUri]<#= efHost.EntityType.Name #>PagerModel viewModel)
+        {
+			return BLLContext.GetInstance<<#= serviceModelName #>>().Get(viewModel);
+        }
+
+		/// <summary>
+        /// 获取单条数据
+        /// </summary>
+        /// <param name="id">数据id</param>
+        /// <returns></returns>
+		public <#= viewModelName #> Get(Guid? id)
+        {
+			if (!id.HasValue) throw new ArgumentNullException("id");
+
+			return BLLContext.GetInstance<<#= serviceModelName #>>().Get(id.Value);
+        }
+
+		/// <summary>
+        /// 新增数据
+        /// </summary>
+        /// <param name="viewModel">新增实体</param>
+        public void Post([FromBody]<#= viewModelName #> viewModel)
+        {
+			if (!ModelState.IsValid)
+            {
+                throw ModelState.Exception();
+            }
+
+            BLLContext.GetInstance<<#= serviceModelName #>>().Update(viewModel);
+        }
+
+		/// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="id">数据id</param>
+        /// <param name="viewModel">更新实体</param>
+        public void Put(Guid? id, [FromBody]<#= viewModelName #> viewModel)
+        {
+			if (!id.HasValue) throw new ArgumentNullException("id");
+			viewModel.Id = id.Value;
+
+			if (!ModelState.IsValid)
+            {
+                throw ModelState.Exception();
+            }
+
+            BLLContext.GetInstance<<#= serviceModelName #>>().Update(viewModel);
+        }
+
+		/// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="id">数据id</param>
+        public void Delete(Guid? id)
+        {
+            if (!id.HasValue) throw new ArgumentNullException("id");
+
+			BLLContext.GetInstance<<#= serviceModelName #>>().Delete(id.Value);
+        }
+    }
+}*/

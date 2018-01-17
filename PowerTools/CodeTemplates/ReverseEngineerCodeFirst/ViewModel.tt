@@ -1,0 +1,93 @@
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude" #><#@
+ output extension=".cs|ViewModels|ViewModel" #><#
+
+    var efHost = (EfTextTemplateHost)Host;
+    var code = new CodeGenerationTools(this);
+#>
+//using System;
+//using System.Linq;
+//using System.Collections.Generic;
+
+//namespace <#= code.EscapeNamespace(efHost.Namespace) #>.<#= efHost.NameSpaceSuffix #>
+//{
+//	  /// <summary>
+//    /// <#= efHost.EntityType.GetDescription() #>
+//    /// </summary>
+//    public partial class <#= efHost.EntityType.Name #><#= efHost.NameSuffix #>
+//    {
+<#
+    var collectionNavigations = efHost.EntityType.NavigationProperties
+		.Where(np => np.DeclaringType == efHost.EntityType)
+		.Where(np => np.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many);
+
+    // Add a ctor to initialize any collections
+    if (collectionNavigations.Any())
+    {
+#>
+//		/// <summary>
+//        /// <#= code.Escape(efHost.EntityType) #>
+//        /// </summary>
+//        public <#= code.Escape(efHost.EntityType) #><#= efHost.NameSuffix #>()
+//        {
+<#
+        foreach (var navProperty in collectionNavigations)
+        {
+#>
+//            //this.<#= code.Escape(navProperty) #><#= efHost.NameSuffix #>s = new List<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #><#= efHost.NameSuffix #>>();
+<#
+        }
+#>
+//        }
+
+<#
+    }
+        
+    foreach (var property in efHost.EntityType.Properties)
+    {
+		if(code.Escape(property).ToLower()=="updatetime"
+			|| code.Escape(property).ToLower()=="updateuser"
+			|| code.Escape(property).ToLower()=="createtime"
+			|| code.Escape(property).ToLower()=="createuser") continue;
+
+        var typeUsage = code.Escape(property.TypeUsage);
+
+        // Fix-up spatial types for EF6
+        if (efHost.EntityFrameworkVersion >= new Version(6, 0)
+            && typeUsage.StartsWith("System.Data.Spatial."))
+        {
+            typeUsage = typeUsage.Replace(
+                "System.Data.Spatial.",
+                "System.Data.Entity.Spatial.");
+        }
+
+#>
+//		  /// <summary>
+//        /// <#= property.GetDescription() #>
+//        /// </summary>
+//        <#= Accessibility.ForProperty(property) #> <#= typeUsage #> <#= code.Escape(property) #> { get; set; }
+
+<#
+    }
+#>
+
+//		  //FK
+<#
+    foreach (var navProperty in efHost.EntityType.NavigationProperties.Where(np => np.DeclaringType == efHost.EntityType))
+    {
+        if (navProperty.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many)
+        {
+#>
+//        //public virtual ICollection<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #><#= efHost.NameSuffix #>> <#= code.Escape(navProperty) #><#= efHost.NameSuffix #>s { get; set; }
+<#
+        }
+        else
+        {
+#>
+//        //public virtual <#= code.Escape(navProperty.ToEndMember.GetEntityType()) #><#= efHost.NameSuffix #> <#= code.Escape(navProperty) #><#= efHost.NameSuffix #> { get; set; }
+<#
+        }
+    }
+#>
+//    }
+//}

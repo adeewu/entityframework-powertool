@@ -1,0 +1,86 @@
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude" #><#@
+ output extension=".cs|Services|Service" #><#
+
+    var efHost = (EfTextTemplateHost)Host;
+    var code = new CodeGenerationTools(this);
+
+	var viewModelName = efHost.EntityType.Name + "ViewModel";
+	var modelName = efHost.EntityType.Name + "Model";
+#>
+/*using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Collections.Generic;
+<#
+	var modelNamespaces = efHost.Namespace.Split('.');
+	var modelNamespacePrefix = string.Join(".", modelNamespaces.Take(modelNamespaces.Count() - 1));
+#>
+using <#= modelNamespacePrefix #>.DAL;
+using <#= modelNamespacePrefix #>.DAL.Models;
+using <#= modelNamespacePrefix #>.ViewModel.ViewModels;
+
+using CIT.Platform.Pager;
+
+namespace <#= code.EscapeNamespace(efHost.Namespace) #>.<#= efHost.NameSpaceSuffix #>
+{
+    public partial class <#= efHost.EntityType.Name #><#= efHost.NameSuffix #> : IService
+    {
+		DALContext db = DALContext.Instance;
+
+		public <#= viewModelName #> Get(Guid id)
+        {
+			var model = db.DbSet<<#= modelName #>>().Get(id);
+
+            return model.CloneObject<<#= viewModelName #>>();
+        }
+
+		public IPagerEnumerable<<#= viewModelName #>> Get(<#= efHost.EntityType.Name #>PagerModel pagerModel)
+        {
+            var models = db.DbSet<<#= modelName #>>()
+                .Entities
+                .ToPagerList(pagerModel)
+				.Select(p => p.CloneObject<<#= viewModelName #>>());
+
+            return models;
+        }
+
+        public void Update(<#= viewModelName #> viewModel)
+        {
+            var model = viewModel.CloneObject<<#= modelName #>>();
+
+			if (viewModel.IsNotNull() && viewModel.Id!= Guid.Empty)
+            {
+				db.DbSet<<#= modelName #>>().Update(model);
+			}
+            else
+            {
+                db.DbSet<<#= modelName #>>().Add(model);
+            }    
+            db.SaveChange();
+        }
+
+        public void Delete(Guid id)
+        {
+            db.DbSet<<#= modelName #>>().Delete(id);
+			db.SaveChange();
+        }
+    }
+
+	public class <#= efHost.EntityType.Name #>PagerModel : PagerModel<<#= modelName #>>
+    {
+        //public Guid? Id { get; set; }
+
+        public override Expression<Func<<#= modelName #>, bool>> GetPagerExpression()
+        {
+            var expression = base.GetPagerExpression();
+
+            //if (Id.HasValue)
+            //{
+            //    expression = expression.Where(p => p.Id == Id.Value);
+            //}
+
+            return expression;
+        }
+    }
+}*/
