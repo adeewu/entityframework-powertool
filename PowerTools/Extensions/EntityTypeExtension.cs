@@ -20,17 +20,17 @@ namespace System.Data.Metadata.Edm
         /// <returns></returns>
         public static void GetTableDescriptions(ConnectionStringSettings connectionStringSettings)
         {
-            var sql = @"SELECT Name = case when a.colorder = 1 then d.name 
-                                           else '' end, 
-                               Description = case when a.colorder = 1 then isnull(f.value, '') 
+            var sql = @"SELECT Name = case when a.colorder = 1 then d.name
+                                           else '' end,
+                               Description = case when a.colorder = 1 then isnull(f.value, '')
                                              else '' end
-                        FROM syscolumns a 
-                               inner join sysobjects d 
-                                  on a.id = d.id 
-                                     and d.xtype = 'U' 
+                        FROM syscolumns a
+                               inner join sysobjects d
+                                  on a.id = d.id
+                                     and d.xtype = 'U'
                                      and d.name <> 'sys.extended_properties'
-                               left join sys.extended_properties   f 
-                                 on a.id = f.major_id 
+                               left join sys.extended_properties   f
+                                 on a.id = f.major_id
                                     and f.minor_id = 0
                         Where (case when a.colorder = 1 then d.name else '' end) <>''";
 
@@ -57,7 +57,10 @@ namespace System.Data.Metadata.Edm
         {
             if (entityType == null || TableDescriptions == null) return entityType.Name;
 
-            return TableDescriptions.Where(p => p.Key == entityType.Name).Select(p => p.Value).FirstOrDefault();
+            var description = TableDescriptions.Where(p => p.Key == entityType.Name).Select(p => p.Value).FirstOrDefault();
+            if (description == null) return entityType.Name;
+
+            return description;
         }
     }
 }
