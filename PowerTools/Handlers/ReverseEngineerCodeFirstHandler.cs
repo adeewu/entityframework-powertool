@@ -48,7 +48,7 @@ namespace Microsoft.DbContextPackage.Handlers
                     new EntityStoreSchemaFilterEntry(null, null, "EdmMetadata", EntityStoreSchemaFilterObjectTypes.Table, EntityStoreSchemaFilterEffect.Exclude),
                     new EntityStoreSchemaFilterEntry(null, null, "__MigrationHistory", EntityStoreSchemaFilterObjectTypes.Table, EntityStoreSchemaFilterEffect.Exclude),
                     new EntityStoreSchemaFilterEntry(null, null, "sysdiagrams", EntityStoreSchemaFilterObjectTypes.Table, EntityStoreSchemaFilterEffect.Exclude),
-                    new EntityStoreSchemaFilterEntry(null, null, null, EntityStoreSchemaFilterObjectTypes.View, EntityStoreSchemaFilterEffect.Exclude),
+                    //new EntityStoreSchemaFilterEntry(null, null, null, EntityStoreSchemaFilterObjectTypes.View, EntityStoreSchemaFilterEffect.Exclude),
                     new EntityStoreSchemaFilterEntry(null, null, null, EntityStoreSchemaFilterObjectTypes.Function, EntityStoreSchemaFilterEffect.Exclude)
                 };
 
@@ -92,7 +92,9 @@ namespace Microsoft.DbContextPackage.Handlers
                 EdmPropertyExtension.ColumnModels = new DocumentionExtension().GenerateDocumentation(entityTypes, connectionStringSettings);
                 EntityTypeExtension.GetTableDescriptions(connectionStringSettings);
 
-                Action<List<Project>> loopProjectsAction = null;
+                var solutionProjects = targetProject.DTE.Solution.Projects.OfType<Project>();
+
+                Action<IEnumerable<Project>> loopProjectsAction = null;
                 loopProjectsAction = projects =>
                 {
                     foreach (var item in projects)
@@ -115,12 +117,6 @@ namespace Microsoft.DbContextPackage.Handlers
                         }
                     }
                 };
-
-                var solutionProjects = new List<Project>();
-                foreach (Project item in targetProject.DTE.Solution.Projects)
-                {
-                    solutionProjects.Add(item);
-                }
                 loopProjectsAction(solutionProjects);
 
                 var duration = DateTime.Now - startTime;

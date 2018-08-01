@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="2b119c79-9836-46e2-b5ed-eb766cebbf7d" Version="0.9.4.5" Language="en-US" Publisher="Adee" />
+        <Identity Id="2b119c79-9836-46e2-b5ed-eb766cebbf7d" Version="0.9.4.7" Language="en-US" Publisher="Adee" />
         <DisplayName>Entity Framework 6 Power Tools Community Edition</DisplayName>
         <Description xml:space="preserve">获取数据表对应类说明：EntityType.GetDescription()
 获取数据表字段说明：EdmProperty.GetDescription()
@@ -9,7 +9,7 @@ T4文件的OutputExtension格式：生成文件后缀，生成文件存放相对
         <MoreInfo>http://go.microsoft.com/fwlink/?LinkId=327691</MoreInfo>
         <License>License.rtf</License>
         <GettingStartedGuide>http://go.microsoft.com/fwlink/?LinkId=327692</GettingStartedGuide>
-        <ReleaseNotes>修复EntityType.GetDescription()报错</ReleaseNotes>
+        <ReleaseNotes>添加视图生成</ReleaseNotes>
         <Icon>db.png</Icon>
         <PreviewImage>menu.png</PreviewImage>
         <Tags>Entity Framework,DbContext,Power Tools,edmx</Tags>
@@ -18,7 +18,7 @@ T4文件的OutputExtension格式：生成文件后缀，生成文件存放相对
         <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,16.0)" />
     </Installation>
     <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
         <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]" />
     </Dependencies>
     <Assets>
